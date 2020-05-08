@@ -1,0 +1,8 @@
+{
+  "max_list_expend": 500,
+  "data_corpus": "./data/domain/data.conllx",
+  "mapping": "./data/mapping.json",
+  "configure": "./data/configure.json",
+  "sequence_expend": "./data/sequence/seq.txt",
+  "data_expend_result": "./data/expend/data_expend.conllx"
+}

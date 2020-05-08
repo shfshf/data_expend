@@ -3,56 +3,88 @@
 from tokenizer_tools.tagset.offset.corpus import Corpus
 import json
 import os
+import random
 
 
-# read data
-corpus = Corpus.read_from_file("./data/domain/data.conllx")
+class Data_Expend():
 
-corpus_stat = corpus.generate_statistics()
+    def __init__(self, config_filepath):
+        self.config_filepath = config_filepath
+        self.config = self.get_config()
 
-# raw entity list
-result_raw = {}
-for k, v in corpus_stat.entity_types.items():
-    d = ["".join(i[0]) for i in v.most_common()]
-    result_raw[k] = d
+    def get_config(self):
+        '''
+            从配置文件中读取配置信息
+        '''
+        with open(self.config_filepath, 'rb') as f:
+            self.config = json.load(f)
+        return self.config
 
-# expend entity list
-with open("./data/mapping.json", 'r', encoding='UTF-8') as f:
-    map_list = json.load(f)
+    def get_list(self):
 
-# new entity list
-result_new = {}
-path = os.path.dirname(__file__)  # 获取当前目录
-for k, v in map_list.items():
-    with open(path + '/data/' + v + '.json') as f:
-        list1 = json.load(f)
-    result_new[k] = list1
+        # read data
+        corpus = Corpus.read_from_file(self.config['data_corpus'])
+
+        corpus_stat = corpus.generate_statistics()
+
+        # raw entity list
+        result_raw = {}
+        for k, v in corpus_stat.entity_types.items():
+            d = ["".join(i[0]) for i in v.most_common()]
+            result_raw[k] = d
+
+        # expend entity list
+        with open(self.config['mapping'], 'r', encoding='UTF-8') as f:
+            map_list = json.load(f)
+
+        # new entity list
+        result_new = {}
+        path = os.path.dirname(__file__)  # 获取当前目录
+        for k, v in map_list.items():
+            with open(path + '/data/' + v + '.json') as f:
+                list1 = json.load(f)
+                if len(list1) > self.config['max_list_expend']:
+                    list2 = random.sample(list1, self.config['max_list_expend'])  # 随机取不超过固定大小的list值
+                    result_new[k] = list2
+                else:
+                    result_new[k] = list1
+        return result_raw, result_new
+
+    # merge entity list
+    @classmethod
+    def hebing(cls, A, B):
+        for k, v in B.items():
+            A[k] = A.get(k, 0) + v
+        return A
+
+    # set entity list
+    @classmethod
+    def quchong(cls, C):
+        for k, v in C.items():
+            v1 = list(set(v))
+            C[k] = v1
+        return C
+
+    def get_expend_res(self):
+        # read data
+        corpus = Corpus.read_from_file(self.config['data_corpus'])
+
+        result_raw, result_new = Data_Expend(self.config['configure']).get_list()
+        result_hb = Data_Expend.hebing(result_raw, result_new)  # merge
+        res = Data_Expend.quchong(result_hb)  # 去重
+
+        # generate sequence pattern
+        doc_pattern = corpus.generate_pattern()
+        doc_pattern.write_to_file(self.config['sequence_expend'])
+
+        # expend doc
+        doc_expend = doc_pattern.render(res)
+        doc_expend.write_to_file(self.config['data_expend_result'])
 
 
-# merge entity list
-def hebing(A, B):
-    for k, v in B.items():
-        A[k] = A.get(k, 0) + v
-    return A
+if __name__ == "__main__":
+
+    conf = Data_Expend('./data/configure.json')
+    conf.get_expend_res()
 
 
-result_hb = hebing(result_raw, result_new)
-
-
-# set entity list
-def quchong(C):
-    for k, v in C.items():
-        v1 = list(set(v))
-        C[k] = v1
-    return C
-
-
-res = quchong(result_hb)
-
-# generate sequence pattern
-doc_pattern = corpus.generate_pattern()
-doc_pattern.write_to_file("./data/sequence/seq.txt")
-
-# expend doc
-doc_expend = doc_pattern.render(res)
-doc_expend.write_to_file("./data/expend/data_expend.conllx")
