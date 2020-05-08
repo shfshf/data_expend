@@ -16,7 +16,6 @@ for k, v in corpus_stat.entity_types.items():
     d = ["".join(i[0]) for i in v.most_common()]
     result_raw[k] = d
 
-
 # expend entity list
 with open("./data/mapping.json", 'r', encoding='UTF-8') as f:
     map_list = json.load(f)
