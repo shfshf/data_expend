@@ -19,4 +19,4 @@ all_run_expend.py 顺序执行上面的两个脚本
 * collect_tag.py 收集数据集的实体列表 entity.txt
 * write_metadata.py 统计语料比例的数量，以及生产的日期等
 
-all_run.py 一键顺序执行 1，2 中的所有脚本，生成模型训练需要的数据格式
+all_run.py 一键顺序执行 1，2 中的所有脚本，生成ner模型训练需要的数据格式
