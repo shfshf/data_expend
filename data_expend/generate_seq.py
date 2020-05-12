@@ -34,20 +34,31 @@ class Data_Expend():
             result_raw[k] = d
 
         # expend entity list
+        # read mapping
         with open(self.config['mapping'], 'r', encoding='UTF-8') as f:
             map_list = json.load(f)
+
+        # read meta
+        with open(self.config['meta'], 'r', encoding='UTF-8') as f:
+            meta_list = json.load(f)
 
         # new entity list
         result_new = {}
         path = os.path.dirname(__file__)  # 获取当前目录
         for k, v in map_list.items():
-            with open(path + '/data/' + v + '.json') as f:
-                list1 = json.load(f)
-                if len(list1) > self.config['max_list_expend']:
-                    list2 = random.sample(list1, self.config['max_list_expend'])  # 随机取不超过固定大小的list值
-                    result_new[k] = list2
-                else:
-                    result_new[k] = list1
+            for m, n in meta_list.items():
+                if v == m:
+                    list3 = []  # key 合并后的list集
+                    for i in n:
+                        with open(path + '/data/dict/' + i) as f:
+                            list1 = json.load(f)
+                            if len(list1) > self.config['max_list_expend']:
+                                list2 = random.sample(list1, self.config['max_list_expend'])  # 随机取不超过固定大小的list值
+                                list3.extend(list2)
+                            else:
+                                list3.extend(list1)
+                    result_new[k] = list3
+
         return result_raw, result_new
 
     # merge entity list
@@ -69,9 +80,9 @@ class Data_Expend():
         # read data
         corpus = Corpus.read_from_file(self.config['data_corpus'])
 
-        result_raw, result_new = Data_Expend(self.config['configure']).get_list()
+        result_raw, result_new = Data_Expend(self.config['configure']).get_list()  # generate list
         result_hb = Data_Expend.hebing(result_raw, result_new)  # merge
-        res = Data_Expend.quchong(result_hb)  # 去重
+        res = Data_Expend.quchong(result_hb)  # set
 
         # generate sequence pattern
         doc_pattern = corpus.generate_pattern()
@@ -86,5 +97,11 @@ if __name__ == "__main__":
 
     conf = Data_Expend('./data/configure.json')
     conf.get_expend_res()
+
+
+
+
+
+
 
 
