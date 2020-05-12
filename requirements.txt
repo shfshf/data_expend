@@ -1,1 +1,2 @@
 tokenizer-tools
+pymongo==3.10.1
