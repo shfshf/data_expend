@@ -23,3 +23,5 @@ metdata = {
 
 with open("data/final/metadata.json", "wt") as fd:
     json.dump(metdata, fd)
+
+print("data finished ! ")

@@ -97,6 +97,7 @@ if __name__ == "__main__":
 
     conf = Data_Expend('./data/configure.json')
     conf.get_expend_res()
+    print("data expend done!")
 
 
 
