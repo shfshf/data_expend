@@ -8,7 +8,7 @@ from tokenizer_tools.conllz.writer import write_conllx
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
-input_file_list = [str(i) for i in pathlib.Path('./data/expend').iterdir() if i.is_file()]
+input_file_list = [str(i) for i in pathlib.Path('./data/domain').iterdir() if i.is_file()]
 
 data = list(conllx_iterator_reader(input_file_list))
 

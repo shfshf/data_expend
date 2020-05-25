@@ -65,7 +65,8 @@ class Data_Expend():
     @classmethod
     def hebing(cls, A, B):
         for k, v in B.items():
-            A[k] = A.get(k, 0) + v
+            if k in A:
+                A[k] += v
         return A
 
     # set entity list
@@ -81,6 +82,7 @@ class Data_Expend():
         corpus = Corpus.read_from_file(self.config['data_corpus'])
 
         result_raw, result_new = Data_Expend(self.config['configure']).get_list()  # generate list
+
         result_hb = Data_Expend.hebing(result_raw, result_new)  # merge
         res = Data_Expend.quchong(result_hb)  # set
 
@@ -98,6 +100,8 @@ if __name__ == "__main__":
     conf = Data_Expend('./data/configure.json')
     conf.get_expend_res()
     print("data expend done!")
+
+
 
 
 

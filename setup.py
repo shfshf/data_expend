@@ -5,10 +5,12 @@ from setuptools import setup
 
 install_requires = [
     "tokenizer_tools",
+    "pathlib",
+    "pymongo==3.10.1",
 ]
 
 setup(name='data_expend',
-      version='1.1',
+      version='1.2',
       description='data_expend',
       url='https://github.com/shfshf/data_expend',
       author='SHF',

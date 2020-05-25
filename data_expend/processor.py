@@ -10,6 +10,8 @@ import json
 from bson import json_util as bson
 
 
+from tokenizer_tools.tagset.offset.corpus import Corpus
+from tokenizer_tools.tagset.offset.document import Document
 from tokenizer_tools.tagset.offset.sequence import Sequence
 from tokenizer_tools.conllz.sentence import SentenceX
 from tokenizer_tools.tagset.converter.offset_to_biluo import offset_to_biluo
@@ -24,7 +26,9 @@ def process_one_line(line, logger=sys.stderr):
     text = obj['text']
     intent = obj['intent']
     id = obj["id"]
-    seq = Sequence(text, label=intent, id=id)
+    domain = obj["domain"]
+    seq = Document(text, label=intent, id=id)
+    seq.domain = domain
     for entity in obj['entities']:
         start = int(entity['start'])  # original index start at 0
         end = int(entity['end'])
@@ -45,7 +49,7 @@ def process_one_line(line, logger=sys.stderr):
     # print(encoding)
 
     sentence = SentenceX(word_lines=text, attribute_lines=[encoding], id=seq.id)
-    sentence.meta = {'label': intent}
+    sentence.meta = {'domain': domain, 'label': intent}
 
     return seq, sentence
 
@@ -57,7 +61,6 @@ class CheckFailedError(Exception):
 if __name__ == "__main__":
 
     test_input = """{"id": "5d11c0344420bb1e20078fd9", "entities": [{"end": 2, "entity": "地点", "length": 2, "start": 0, "value": "上海"}, {"end": 5, "entity": "日期", "length": 2, "start": 3, "value": "明天"}], "text": "上海的明天的天气", "intent": "查询天气", "domain": "weather"}"""
-
 
     seq, seqence = process_one_line(test_input)
 

@@ -27,7 +27,6 @@ def main(file_prefix):
             line = raw_line.strip()
             if not line:
                 continue
-
             try:
                 seq, sentence = process_one_line(line, logger)
             except CheckFailedError as e:

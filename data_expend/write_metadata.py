@@ -2,11 +2,16 @@
 
 import datetime
 import json
+import pathlib
 
 from tokenizer_tools.conllz.iterator_reader import conllx_iterator_reader
 
-
-data = list(conllx_iterator_reader(["./data/expend/data_expend.conllx"]))
+path = pathlib.Path('./data/mapping.json')
+if path.exists():
+    dir = ['./data/expend/data_expend.conllx']
+else:
+    dir = ['./data/all_data.conllx']
+data = list(conllx_iterator_reader(dir))
 train_data = list(conllx_iterator_reader(["data/final/train.conllx"]))
 dev_data = list(conllx_iterator_reader(["data/final/dev.conllx"]))
 test_data = list(conllx_iterator_reader(["data/final/test.conllx"]))
@@ -24,4 +29,4 @@ metdata = {
 with open("data/final/metadata.json", "wt") as fd:
     json.dump(metdata, fd)
 
-print("data finished ! ")
+print("data process finished ! ")
