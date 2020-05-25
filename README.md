@@ -17,7 +17,7 @@
 * generate_seq.py 读取生成的 data.conllx 语料，根据mapping.json字典映射表，寻找data文件夹里面需要扩展的实体list进行语料扩充，依赖configure.json配置文件
 * generate_seq2.py 功能与 generate_seq.py 一样，区别是不依赖 configure.json 配置文件，超参数都是固定的。
 
-all_run_expend.py 顺序执行上面的三个脚本, 生成的扩展后的语料保存在'./data/expend/data_expend.conllx'
+all_run_expend.py 顺序执行上面的1、2, 生成的扩展后的语料保存在'./data/expend/data_expend.conllx'
 
 ### 3. 对扩充后的语料（可选）进行比例划分，收集实体列表等处理，用作 ner 模型训练
 
@@ -26,4 +26,4 @@ all_run_expend.py 顺序执行上面的三个脚本, 生成的扩展后的语料
 * collect_label.py 收集数据集的意图列表 label.txt
 * write_metadata.py 统计语料比例的数量，以及生产的日期等
 
-all_run.py 一键顺序执行 1，2 中的所有脚本，生成ner模型训练需要的数据格式
+all_run.py 一键顺序执行 1，2，3 中的所有脚本，生成ner模型训练需要的数据格式
