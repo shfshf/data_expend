@@ -10,7 +10,7 @@ install_requires = [
 ]
 
 setup(name='data_expend',
-      version='1.2',
+      version='1.3',
       description='data_expend',
       url='https://github.com/shfshf/data_expend',
       author='SHF',

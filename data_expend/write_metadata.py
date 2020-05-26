@@ -6,8 +6,13 @@ import pathlib
 
 from tokenizer_tools.conllz.iterator_reader import conllx_iterator_reader
 
-path = pathlib.Path('./data/mapping.json')
-if path.exists():
+# read mapping
+with open("./data/mapping.json", 'r', encoding='UTF-8') as f:
+    map_list = json.load(f)
+
+# path = pathlib.Path('./data/mapping.json')
+# if path.exists():
+if map_list:
     dir = ['./data/expend/data_expend.conllx']
 else:
     dir = ['./data/all_data.conllx']

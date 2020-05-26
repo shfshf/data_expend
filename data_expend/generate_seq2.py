@@ -38,8 +38,8 @@ def get_list():
                 for i in n:
                     with open(path + '/data/dict/' + i) as f:
                         list1 = json.load(f)
-                        if len(list1) > 100:
-                            list2 = random.sample(list1, 100)  # 随机取不超过固定大小的list值
+                        if len(list1) > 6:
+                            list2 = random.sample(list1, 6)  # 随机取不超过固定大小的list值
                             list3.extend(list2)
                         else:
                             list3.extend(list1)
