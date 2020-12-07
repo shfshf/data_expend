@@ -65,6 +65,7 @@ if __name__ == "__main__":
     seq, seqence = process_one_line(test_input)
 
     print(seq)
+    # print(seqence)
 
     # Sequence(text=['上', '海', '的', '明', '天', '的', '天', '气'], span_set=SpanSet(
     #          [Span(0, 2, '地点', value=['上', '海'], normal_value=None), Span(3, 5, '日期', value=['明', '天'], normal_value=None)]),

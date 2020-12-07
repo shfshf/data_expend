@@ -4,6 +4,9 @@ from tokenizer_tools.tagset.offset.corpus import Corpus
 import json
 import os
 import random
+import itertools
+from typing import Dict, List
+from random import sample
 
 
 def get_list():
@@ -64,8 +67,32 @@ def quchong(C):
     return C
 
 
-# read data
+def render(doc_pattern, dictionary: Dict[str, List[str]]):
+    doc_list = []
 
+    for pattern in doc_pattern:
+        placeholder_names = [i.entity for i in pattern.get_placeholders()]
+        pattern_specific_dictionary = {i: dictionary[i] for i in placeholder_names}
+
+        instance_list_variable = list(itertools.product(*pattern_specific_dictionary.values()))
+        # print(len(instance_list_variable))
+        if len(instance_list_variable) > 200:
+            random_instance_list_variable = sample(instance_list_variable, 200)
+        else:
+            random_instance_list_variable = instance_list_variable
+
+        for instance_variable in random_instance_list_variable:
+            instance_mapping = dict(
+                zip(pattern_specific_dictionary.keys(),
+                    instance_variable))
+
+            doc = pattern.render(instance_mapping)
+            doc_list.append(doc)
+
+    return Corpus(doc_list)
+
+
+# read data
 corpus = Corpus.read_from_file("./data/all_data.conllx")
 result_raw, result_new = get_list()  # generate list
 
@@ -77,7 +104,7 @@ doc_pattern = corpus.generate_pattern()
 doc_pattern.write_to_file("./data/sequence/seq.txt")
 
 # expend doc
-doc_expend = doc_pattern.render(res)
+doc_expend = render(doc_pattern, res)
 doc_expend.write_to_file("./data/expend/data_expend.conllx")
 
 print("data expend done!")

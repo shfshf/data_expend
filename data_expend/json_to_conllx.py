@@ -4,6 +4,7 @@ import os
 import pathlib
 
 from tokenizer_tools.conllz.writer import write_conllx
+from tokenizer_tools.tagset.offset.corpus import Corpus
 
 from data_expend.processor import process_one_line, CheckFailedError
 
@@ -15,7 +16,7 @@ def make_dir():
             os.makedirs(i)
 
 
-def main(file_prefix):
+def to_conllx(file_prefix):
     base_name, _ = os.path.splitext(file_prefix)
 
     log_file = './data/error/{}.error'.format(base_name)
@@ -36,8 +37,10 @@ def main(file_prefix):
                 output_lines.append(sentence)
 
         # write_conll(output_lines, 'data/{}.text'.format(file_prefix))
-        with open('./data/domain/{}.conllx'.format(base_name), 'wt') as output_fd:
-            write_conllx(output_lines, output_fd)
+        output_file = './data/domain/{}.conllx'.format(base_name)
+        # with open('./data/domain/{}.conllx'.format(base_name), 'wt') as output_fd:
+            # write_conllx(output_lines, output_fd)
+        Corpus(seq_list).write_to_file(output_file)
 
 
 if __name__ == "__main__":
@@ -47,7 +50,7 @@ if __name__ == "__main__":
     input_file_list = [i.name for i in pathlib.Path('./data/raw').iterdir() if i.is_file()]
 
     for input_file in input_file_list:
-        main(input_file)
+        to_conllx(input_file)
 
 
 

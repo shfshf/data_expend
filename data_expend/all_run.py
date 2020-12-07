@@ -20,6 +20,6 @@ if map_list:
 
 os.system("python -m data_expend.split_data")
 os.system("python -m data_expend.collect_tag")
-os.system("python -m data_expend.collect_label")
+# os.system("python -m data_expend.collect_label")
 os.system("python -m data_expend.write_metadata")
 
